@@ -1,0 +1,18 @@
+{% import "_macros.html" as macros %}
+
+<!doctype html>
+<html lang="en">
+
+	{{ macros.head() }}
+
+	<body class="bg-white">
+		{{ macros.navbar() }}
+
+		<div>
+			{% block content %}
+			{% endblock %}
+		</div>
+
+	</body>
+
+</html>

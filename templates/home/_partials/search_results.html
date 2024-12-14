@@ -1,0 +1,10 @@
+{% for o in obj %}
+<tr>
+	<td>{{ o.2 }}</td>
+	<td>{{ o.3 }}</td>
+	<td>{{ o.4 }}</td>
+	<td>{{ o.5 }}</td>
+	<td>{{ o.6 }}</td>
+	<td><a href="{{ url_for('view', db_id=o.0, ob_id=o.1) }}" style="color:blue">View</button></td>
+</tr>
+{% endfor %}

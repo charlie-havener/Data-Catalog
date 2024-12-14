@@ -1,0 +1,8 @@
+# ignore the python virtual env directory
+venv/
+
+# ignore all the sqlite database files
+*.db
+
+# ignore the pycache directory
+__pycache__/

@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+	<!-- Hidden, it's value is updated by the edit pop ups. This value is then included in htmx
+	requests via hx-include. The value is part of the request.form under it's `name' attribute -->
+	<input hidden id="updated-desc" name="updated-desc"></input>
+
+	<h1>{{ obj.2 }}.{{ obj.3 }}.{{ obj.4 }}</h1>
+
+	<div>
+		<div>Type:</div>
+		<div>{{ obj.6 }}</div>
+		<div>Description:</div>
+		<div>{{ obj.7 }}</div>
+	<div>
+
+
+	</br></br></br>
+
+	{# only tables and views will have columns #}
+	{% if obj.5 == 'U' or obj.5 == 'V' %}
+		<div>Columns</div>
+		<table>
+			<thead>
+				<tr>
+					<th>Column ID</th>
+					<th>Column Name</th>
+					<th>Column Type</th>
+					<th>Description</th>
+					<th></th><!-- blank col for edit button --!>
+				</tr>
+			<thead>
+			<tbody hx-target="closest tr">
+			{% for col in cols %}
+			<tr>
+				<td>{{ col.0 }}</td>
+				<td>{{ col.1 }}</td>
+				<td>{{ col.2 }}</td>
+				<td>{{ col.3 }}</td>
+				<td>
+				<button id="col_row_{{ col.0 }}" hx-put="{{ url_for('edit_column_desc', db_id=obj.0, ob_id=obj.1, col_id=col.0) }}" hx-include="#updated-desc" hx-swap="outerHTML" hx-trigger="confirmed" onclick="editDescPopUp(this.id, '{{ obj.2 }}.{{ obj.3 }}.{{ obj.4 }}[{{ col.1 }}]', '{{ col.3 }}')">
+						Edit
+					</button>
+				</td>
+			</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+		</br>
+
+		<div>Indexes</div>
+		<table>
+			<tr>
+				<th>Index ID</th>
+				<th>Index Name</th>
+				<th>Index Type</th>
+				<th>PK?</th>
+			</tr>
+		{% for idx in idxs %}
+			<tr>
+				<td>{{ idx.0 }}</td>
+				<td>{{ idx.1 }}</td>
+				<td>{{ idx.2 }}</td>
+				<td>{{ idx.3 }}</td>
+			</tr>
+		{% endfor %}
+		</table>
+		</br>
+	{% endif %}
+
+	<div>TODO: Dependencies</div>
+	</br>
+
+	<div>TODO: Dependents</div>
+	</br>
+
+	{# only views and stored_procedures will have a definition #}
+	{% if obj.5 == 'V' or obj.5 == 'P' %}
+		<div>SQL Definition</div>
+		</br>
+	{% endif %}
+
+	<div>TODO: Additional Info</div>
+	</br>
+
+	<div>TODO: Queries</div>
+	</br>
+
+{% endblock %}
