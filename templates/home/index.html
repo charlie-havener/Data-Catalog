@@ -2,65 +2,45 @@
 
 {% block content %}
 
-	<form autocomplete="off" class="flex items-center max-w-lg mx-auto mt-6"
-		hx-post="/search" hx-trigger="input changed delay:600ms from:#search-box, change from:.search-radio, load" hx-target="#search-results" hx-indicator="#radio-indicator" hx-disabled-elt=".search-radio">
-		<div class="relative w-full">
-			<div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-				<svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-					<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-				</svg>	
-			</div>
-			<input type="search" id="search-box" name="search" class="bg-gray-50 border-2 border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder="Begin typing to search..." />
-		</div>
-		<img id="radio-indicator" class="htmx-indicator h-12" src="/static/search.svg" alt="wtf"/>
-		</br>
-
-
-		<label style="margin:2px">
-			<input type="radio" class="search-radio" name="filter" value="All" checked="true"/>All
-		</label>
-		<label style="margin:2px">
-			<input type="radio" class="search-radio" name="filter" value="U"/>Tables
-		</label>
-		<label style="margin:2px">
-			<input type="radio" class="search-radio" name="filter" value="V"/>Views
-		</label>
-		<label style="margin:2px">
-			<input type="radio" class="search-radio" name="filter" value="P"/>Stored Procedures
-		</label>
-
-	</form>
-
-	</br>
-	</br>
-
-
-
 	<!-- searches when contents of the searchbox change (with 1s delay) or immediately when the radio button selection changes --!>
-	<form autocomplete="off"
-		<div style="height:15px">
-			<input id="search-box" type="search" name="search" placeholder="Begin typing to search objects..." style="width:400px;">
-				<img id="radio-indicator" class="my-indicator" src="/static/search.svg" alt="wtf" style="height:100%;"/>
-			</input>
+	<form autocomplete="off" class="items-center max-w-lg mx-auto mt-6"
+		hx-post="/search" hx-trigger="input changed delay:600ms from:#search-box, change from:.search-radio, load" hx-target="#search-results" hx-indicator="#radio-indicator" hx-disabled-elt=".search-radio">
+		<div class="flex">
+			<div class="relative w-full">
+				<div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+					<svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+						<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+					</svg>	
+				</div>
+				<input type="search" id="search-box" name="search" class="bg-gray-50 border-2 border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder="Begin typing to search..." />
+			</div>
+			<img id="radio-indicator" class="htmx-indicator h-12" src="/static/search.svg" alt="loading"/>
 		</div>
-		</br>
-		<!-- 
-			TODO: get the checkboxes to be button-like and the selected one is colored in
-			<input type="radio" style="display:none"/>
-		--!>
-		<label style="margin:2px">
-			<input type="radio" class="search-radio" name="filter" value="All" checked="true"/>All
-		</label>
-		<label style="margin:2px">
-			<input type="radio" class="search-radio" name="filter" value="U"/>Tables
-		</label>
-		<label style="margin:2px">
-			<input type="radio" class="search-radio" name="filter" value="V"/>Views
-		</label>
-		<label style="margin:2px">
-			<input type="radio" class="search-radio" name="filter" value="P"/>Stored Procedures
-		</label>
+
+		<ul class="flex">
+			<li class="p-1">
+				<input type="radio" id="filter-all" name="filter" value="All" class="hidden peer search-radio" checked required />
+				<label for="filter-all" class="inline-flex items-center justify-between p-2 py-1 text-center text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100">All</label>
+			</li>
+			<li class="p-1">
+				<input type="radio" id="filter-tables" name="filter" value="U" class="hidden peer search-radio" required />
+				<label for="filter-tables" class="inline-flex items-center justify-between p-2 py-1 text-center text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100">Tables</label>
+			</li>
+			<li class="p-1">
+				<input type="radio" id="filter-views" name="filter" value="V" class="hidden peer search-radio" required />
+				<label for="filter-views" class="inline-flex items-center justify-between p-2 py-1 text-center text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100">Views</label>
+			</li>
+			<li class="p-1">
+				<input type="radio" id="filter-sp" name="filter" value="P" class="hidden peer search-radio" required />
+				<label for="filter-sp" class="inline-flex items-center justify-between p-2 py-1 text-center text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100">Stored Procedures</label>
+			</li>
+		</ul>
+
 	</form>
+
+	</br>
+	</br>
+
 
 	<table>
 		<thead>
