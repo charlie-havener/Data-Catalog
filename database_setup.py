@@ -200,6 +200,7 @@ def reset_data():
     c.execute('''INSERT INTO index_columns VALUES (?,?,?,?,?,?,?,?,?)''', (2,'CATSWeb',2,'Subtasks',11,'IDX_SubtaskName',2,'subtask_id',1))
 
     c.execute('''INSERT INTO object_descriptions VALUES (?,?,?)''', (1,1,'ERP-Locations-Description'))
+    c.execute('''INSERT INTO object_descriptions VALUES (?,?,?)''', (1,2,'really really really really really really really really really really really really really really really really really really really really really really really really really really long description'))
 
     conn.commit()
 
@@ -209,4 +210,19 @@ def reset_data():
 if __name__ == "__main__":
     # create_database()
     # reset_data()
+    
+
+    conn = sqlite3.connect('database_objects.db')
+    c = conn.cursor()
+    c.execute('''
+        DELETE FROM object_descriptions
+        WHERE database_id = 1 AND object_id = 2''')
+    conn.commit()
+    c.execute('''
+        INSERT INTO object_descriptions VALUES (?,?,?)
+        ''', (1,2,'really really really really really really really really really really really really really really really really really really really really really really really really really really long description'))
+    conn.commit()
+    conn.close()
+
+
     query_database()

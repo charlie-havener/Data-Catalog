@@ -28,7 +28,7 @@
 					<th>Column Name</th>
 					<th>Column Type</th>
 					<th>Description</th>
-					<th></th><!-- blank col for edit button --!>
+					<th>Action</th>
 				</tr>
 			<thead>
 			<tbody hx-target="closest tr">
@@ -86,5 +86,58 @@
 
 	<div>TODO: Queries</div>
 	</br>
+
+
+
+<div class="mb-4 border-b border-gray-200 mx-8">
+    <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="object-details-tabs-buttons" data-tabs-active-classes="text-purple-600 hover:text-purple-600 border-purple-600" data-tabs-inactive-classes="text-gray-500 hover:text-gray-600 border-gray-200 hover:border-gray-400">
+        <li class="me-2">
+            <button class="tab-button inline-block p-4 border-b-2 rounded-t-lg text-purple-600 hover:text-purple-600 border-purple-600" id="column-tab-btn" data-tabs-target="column-tab-data" type="button" onclick="updateTabs(this)">Columns</button>
+        </li>
+        <li class="me-2">
+            <button class="tab-button inline-block p-4 border-b-2 rounded-t-lg text-gray-500 hover:text-gray-600 border-gray-200 hover:border-gray-400" id="index-tab-btn" data-tabs-target="index-tab-data" type="button" onclick="updateTabs(this)">Indexes</button>
+        </li>
+        <li class="me-2">
+            <button class="tab-button inline-block p-4 border-b-2 rounded-t-lg text-gray-500 hover:text-gray-600 border-gray-200 hover:border-gray-400" id="dependency-tab-btn" data-tabs-target="dependency-tab-data" type="button" onclick="updateTabs(this)">Dependencies</button>
+        </li>
+        <li>
+            <button class="tab-button inline-block p-4 border-b-2 rounded-t-lg text-gray-500 hover:text-gray-600 border-gray-200 hover:border-gray-400" id="dependent-tab-btn" data-tabs-target="dependent-tab-data" type="button" onclick="updateTabs(this)">Dependents</button>
+        </li>
+        <li>
+            <button class="tab-button inline-block p-4 border-b-2 rounded-t-lg text-gray-500 hover:text-gray-600 border-gray-200 hover:border-gray-400" id="additional-tab-btn" data-tabs-target="additional-tab-data" type="button" onclick="updateTabs(this)">Additional Info</button>
+        </li>
+        <li>
+            <button class="tab-button inline-block p-4 border-b-2 rounded-t-lg text-gray-500 hover:text-gray-600 border-gray-200 hover:border-gray-400" id="query-tab-btn" data-tabs-target="query-tab-data" type="button" onclick="updateTabs(this)">Queries</button>
+        </li>
+    </ul>
+</div>
+<div id="object-details-tabs-data">
+    <div class="tab-data p-4 rounded-lg bg-gray-50" id="column-tab-data">
+        <p class="text-sm text-gray-500">column placeholder text</p>
+    </div>
+    <div class="tab-data hidden p-4 rounded-lg bg-gray-50" id="index-tab-data">
+        <p class="text-sm text-gray-500">index placeholder text</p>
+    </div>
+    <div class="tab-data hidden p-4 rounded-lg bg-gray-50" id="dependency-tab-data">
+        <p class="text-sm text-gray-500">dependency placeholder text</p>
+    </div>
+    <div class="tab-data hidden p-4 rounded-lg bg-gray-50" id="dependent-tab-data">
+        <p class="text-sm text-gray-500">dependent placeholder text</p>
+    </div>
+    <div class="tab-data hidden p-4 rounded-lg bg-gray-50" id="additional-tab-data">
+        <p class="text-sm text-gray-500">additional placeholder text</p>
+    </div>
+    <div class="tab-data hidden p-4 rounded-lg bg-gray-50" id="query-tab-data">
+        <p class="text-sm text-gray-500">query placeholder text</p>
+    </div>
+</div>
+
+<!-- 
+	active: text-purple-600 hover:text-purple-600 border-purple-600
+  inactive: text-gray-500 hover:text-gray-600 border-gray-100 hover:border-gray-300
+--!>
+
+
+
 
 {% endblock %}

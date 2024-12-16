@@ -58,6 +58,7 @@ def edit_column_desc(db_id, ob_id, col_id):
 
 @app.route('/search', methods=['POST'])
 def search_tasks():
+    time.sleep(1)
     search_string = request.form.get('search')
     filter = request.form.get('filter')
     (conn, c) = db.get_cursor('database_objects.db')

@@ -1,0 +1,8 @@
+.tab-data {
+	animation: fadeEffect 1s ease;
+}
+
+@keyframes fadeEffect {
+	from {opacity: 0;}
+	to {opacity: 1;}
+}
