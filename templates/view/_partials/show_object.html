@@ -1,0 +1,8 @@
+<div id="object_definition" class="block p-6 my-8">
+	<h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">
+		{{ obj.2 }}.{{ obj.3 }}.{{ obj.4 }}
+		<button id="desc_update" class="font-normal text-sm ml-4 text-blue-600 hover:underline" hx-put="{{ url_for('edit_object_desc', db_id=obj.0, ob_id=obj.1) }}" hx-target="#object_definition" hx-include="#updated-desc" hx-swap="outerHTML" hx-trigger="confirmed" onclick="editDescPopUp(this.id, '{{ obj.2 }}.{{ obj.3 }}.{{ obj.4 }}', '{{ obj.7 }}')">Edit</button>
+	</h5>
+	<p class="mb-2 font-bold tracking-tight text-gray-700">{{ obj.6 }}</h5>
+	<p class="font-normal text-gray-700">{{ obj.7 }}</p>
+</div>

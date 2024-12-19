@@ -2,134 +2,134 @@
 
 {% block content %}
 
-	<!-- Hidden, it's value is updated by the edit pop ups. This value is then included in htmx
+<!-- Hidden, it's value is updated by the edit pop ups. This value is then included in htmx
 	requests via hx-include. The value is part of the request.form under it's `name' attribute -->
-	<input hidden id="updated-desc" name="updated-desc"></input>
+<input hidden id="updated-desc" name="updated-desc"></input>
 
-	<h1>{{ obj.2 }}.{{ obj.3 }}.{{ obj.4 }}</h1>
-
-	<div>
-		<div>Type:</div>
-		<div>{{ obj.6 }}</div>
-		<div>Description:</div>
-		<div>{{ obj.7 }}</div>
-	<div>
-
-
-	</br></br></br>
-
-	{# only tables and views will have columns #}
-	{% if obj.5 == 'U' or obj.5 == 'V' %}
-		<div>Columns</div>
-		<table>
-			<thead>
-				<tr>
-					<th>Column ID</th>
-					<th>Column Name</th>
-					<th>Column Type</th>
-					<th>Description</th>
-					<th>Action</th>
-				</tr>
-			<thead>
-			<tbody hx-target="closest tr">
-			{% for col in cols %}
-			<tr>
-				<td>{{ col.0 }}</td>
-				<td>{{ col.1 }}</td>
-				<td>{{ col.2 }}</td>
-				<td>{{ col.3 }}</td>
-				<td>
-				<button id="col_row_{{ col.0 }}" hx-put="{{ url_for('edit_column_desc', db_id=obj.0, ob_id=obj.1, col_id=col.0) }}" hx-include="#updated-desc" hx-swap="outerHTML" hx-trigger="confirmed" onclick="editDescPopUp(this.id, '{{ obj.2 }}.{{ obj.3 }}.{{ obj.4 }}[{{ col.1 }}]', '{{ col.3 }}')">
-						Edit
-					</button>
-				</td>
-			</tr>
-			{% endfor %}
-			</tbody>
-		</table>
-		</br>
-
-		<div>Indexes</div>
-		<table>
-			<tr>
-				<th>Index ID</th>
-				<th>Index Name</th>
-				<th>Index Type</th>
-				<th>PK?</th>
-			</tr>
-		{% for idx in idxs %}
-			<tr>
-				<td>{{ idx.0 }}</td>
-				<td>{{ idx.1 }}</td>
-				<td>{{ idx.2 }}</td>
-				<td>{{ idx.3 }}</td>
-			</tr>
-		{% endfor %}
-		</table>
-		</br>
-	{% endif %}
-
-	<div>TODO: Dependencies</div>
-	</br>
-
-	<div>TODO: Dependents</div>
-	</br>
-
-	{# only views and stored_procedures will have a definition #}
-	{% if obj.5 == 'V' or obj.5 == 'P' %}
-		<div>SQL Definition</div>
-		</br>
-	{% endif %}
-
-	<div>TODO: Additional Info</div>
-	</br>
-
-	<div>TODO: Queries</div>
-	</br>
-
+<div id="object_definition" class="block p-6 my-8">
+	<h5 class="text-2xl font-bold tracking-tight text-gray-900">
+		{{ obj.2 }}.{{ obj.3 }}.{{ obj.4 }}
+		<button id="desc_update" class="font-normal text-sm ml-4 text-blue-600 hover:underline" hx-put="{{ url_for('edit_object_desc', db_id=obj.0, ob_id=obj.1) }}" hx-target="#object_definition" hx-include="#updated-desc" hx-swap="outerHTML" hx-trigger="confirmed" onclick="editDescPopUp(this.id, '{{ obj.2 }}.{{ obj.3 }}.{{ obj.4 }}', '{{ obj.7 }}')">Edit</button>
+	</h5>
+	<p class="mb-4 font-semibold tracking-tight text-gray-400">{{ obj.6 }}</h5>
+	<p class="font-normal text-gray-700">{{ obj.7 }}</p>
+</div>
 
 
 <div class="mb-4 border-b border-gray-200 mx-8">
     <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="object-details-tabs-buttons" data-tabs-active-classes="text-purple-600 hover:text-purple-600 border-purple-600" data-tabs-inactive-classes="text-gray-500 hover:text-gray-600 border-gray-200 hover:border-gray-400">
+
+		{% if obj.5 == 'U' or obj.5 == 'V' %}
         <li class="me-2">
             <button class="tab-button inline-block p-4 border-b-2 rounded-t-lg text-purple-600 hover:text-purple-600 border-purple-600" id="column-tab-btn" data-tabs-target="column-tab-data" type="button" onclick="updateTabs(this)">Columns</button>
         </li>
+		{% endif %}
+
+		{% if obj.5 == 'U' %}
         <li class="me-2">
             <button class="tab-button inline-block p-4 border-b-2 rounded-t-lg text-gray-500 hover:text-gray-600 border-gray-200 hover:border-gray-400" id="index-tab-btn" data-tabs-target="index-tab-data" type="button" onclick="updateTabs(this)">Indexes</button>
         </li>
+		{% endif %}
+
         <li class="me-2">
             <button class="tab-button inline-block p-4 border-b-2 rounded-t-lg text-gray-500 hover:text-gray-600 border-gray-200 hover:border-gray-400" id="dependency-tab-btn" data-tabs-target="dependency-tab-data" type="button" onclick="updateTabs(this)">Dependencies</button>
         </li>
+
         <li>
             <button class="tab-button inline-block p-4 border-b-2 rounded-t-lg text-gray-500 hover:text-gray-600 border-gray-200 hover:border-gray-400" id="dependent-tab-btn" data-tabs-target="dependent-tab-data" type="button" onclick="updateTabs(this)">Dependents</button>
         </li>
+
         <li>
             <button class="tab-button inline-block p-4 border-b-2 rounded-t-lg text-gray-500 hover:text-gray-600 border-gray-200 hover:border-gray-400" id="additional-tab-btn" data-tabs-target="additional-tab-data" type="button" onclick="updateTabs(this)">Additional Info</button>
         </li>
+
+		{% if obj.5 == 'U' or obj.5 == 'V' %}
         <li>
             <button class="tab-button inline-block p-4 border-b-2 rounded-t-lg text-gray-500 hover:text-gray-600 border-gray-200 hover:border-gray-400" id="query-tab-btn" data-tabs-target="query-tab-data" type="button" onclick="updateTabs(this)">Queries</button>
         </li>
+		{% endif %}
+
     </ul>
 </div>
 <div id="object-details-tabs-data">
-    <div class="tab-data p-4 rounded-lg bg-gray-50" id="column-tab-data">
-        <p class="text-sm text-gray-500">column placeholder text</p>
+
+	{% if obj.5 == 'U' or obj.5 == 'V' %}
+	<div class="tab-data p-4 rounded-lg" id="column-tab-data">
+		<div class="relative overflow-x-auto shadow-md sm:rounded-lg mx-8 my-10">
+			<table class="w-full text-sm text-left text-gray-500">
+				<thead class="text-xs text-gray-700 uppercase bg-gray-300 text-left">
+					<tr>
+						<th scope="col" class="px-6 py-3">Order</th>
+						<th scope="col" class="px-6 py-3">Name</th>
+						<th scope="col" class="px-6 py-3">Type</th>
+						<th scope="col" class="px-6 py-3">Description</th>
+						<th scope="col" class="px-6 py-3 max-w-xs">Edit</th>
+					</tr>
+				</thead>
+				<tbody hx-target="closest tr">
+				{% for col in cols %}
+					<tr class="bg-white border-b hover:bg-gray-200">
+						<td class="px-4 py-4">{{ col.0 }}</td>
+						<td class="px-4 py-4">{{ col.1 }}</td>
+						<td class="px-4 py-4">{{ col.2 }}</td>
+						<td class="px-4 py-4">{{ col.3 }}</td>
+						<td class="px-4 py-4">
+							<button id="col_row_{{ col.0 }}" class="font-medium text-blue-600 hover:underline" hx-put="{{ url_for('edit_column_desc', db_id=obj.0, ob_id=obj.1, col_id=col.0) }}" hx-include="#updated-desc" hx-swap="outerHTML" hx-trigger="confirmed" onclick="editDescPopUp(this.id, '{{ obj.2 }}.{{ obj.3 }}.{{ obj.4 }}[{{ col.1 }}]', '{{ col.3 }}')">
+								Edit
+							</button>
+						</td>
+					</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+		</div>
     </div>
-    <div class="tab-data hidden p-4 rounded-lg bg-gray-50" id="index-tab-data">
-        <p class="text-sm text-gray-500">index placeholder text</p>
+	{% endif %}
+
+	{% if obj.5 == 'U' %}
+	<div class="tab-data hidden p-4 rounded-lg" id="index-tab-data">
+		<div class="relative overflow-x-auto shadow-md sm:rounded-lg mx-8 my-10">
+			<table class="w-full text-sm text-left text-gray-500">
+				<thead class="text-xs text-gray-700 uppercase bg-gray-300 text-left">
+					<tr>
+						<th scope="col" class="px-6 py-3">ID</th>
+						<th scope="col" class="px-6 py-3">Name</th>
+						<th scope="col" class="px-6 py-3">Type</th>
+						<th scope="col" class="px-6 py-3">Primary Key</th>
+					</tr>
+				</thead>
+				<tbody hx-target="closest tr">
+				{% for idx in idxs %}
+					<tr class="bg-white border-b hover:bg-gray-200">
+						<td class="px-4 py-4">{{ idx.0 }}</td>
+						<td class="px-4 py-4">{{ idx.1 }}</td>
+						<td class="px-4 py-4">{{ idx.2 }}</td>
+						<td class="px-4 py-4">{{ idx.3 }}</td>
+					</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+		</div>
     </div>
+	{% endif %}
+
     <div class="tab-data hidden p-4 rounded-lg bg-gray-50" id="dependency-tab-data">
         <p class="text-sm text-gray-500">dependency placeholder text</p>
     </div>
+
     <div class="tab-data hidden p-4 rounded-lg bg-gray-50" id="dependent-tab-data">
         <p class="text-sm text-gray-500">dependent placeholder text</p>
     </div>
+
     <div class="tab-data hidden p-4 rounded-lg bg-gray-50" id="additional-tab-data">
         <p class="text-sm text-gray-500">additional placeholder text</p>
     </div>
+
+	{% if obj.5 == 'U' or obj.5 == 'V' %}
     <div class="tab-data hidden p-4 rounded-lg bg-gray-50" id="query-tab-data">
         <p class="text-sm text-gray-500">query placeholder text</p>
     </div>
+	{% endif %}
 </div>
 
 <!-- 

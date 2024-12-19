@@ -33,6 +33,30 @@ def view(db_id, ob_id):
 
 
 # TODO: change to edit description information
+@app.route('/edit/<int:db_id>/<int:ob_id>', methods=['GET', 'PUT'])
+def edit_object_desc(db_id, ob_id):
+    (conn, c) = db.get_cursor('database_objects.db')
+
+    if request.method == 'PUT':
+        desc = request.form.get('updated-desc')
+        desc = db.sanatize(desc)
+
+        db.query_desc_upsert(c, db_id, ob_id, desc)
+        conn.commit()
+        conn.close()
+
+        request.method = 'GET'
+        return edit_object_desc(db_id, ob_id)
+
+    # default GET
+    db.query_object_info(c, db_id, ob_id)
+    obj = c.fetchone()
+
+    conn.close()
+    return render_template('view/_partials/show_object.html', obj=obj)
+
+
+# TODO: change to edit description information
 @app.route('/edit/<int:db_id>/<int:ob_id>/<int:col_id>', methods=['GET', 'PUT'])
 def edit_column_desc(db_id, ob_id, col_id):
     (conn, c) = db.get_cursor('database_objects.db')

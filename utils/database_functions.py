@@ -63,7 +63,7 @@ def query_object_info(cursor, database_id, object_id):
         FROM objects as o
         LEFT JOIN object_descriptions as od
             ON o.database_id = od.database_id
-                AND o.object_id = od.database_id
+                AND o.object_id = od.object_id
         WHERE
             o.database_id = ?
             AND o.object_id = ?
@@ -124,6 +124,17 @@ def query_indexes_info(cursor, database_id, object_id):
             i.database_id = ?
             AND i.object_id = ?
         ''', (database_id, object_id,))
+    return
+
+
+def query_desc_upsert(cursor, database_id, object_id, new_description):
+    cursor.execute('''
+        INSERT INTO object_descriptions (database_id, object_id, description)
+        VALUES (?1,?2,?3)
+        ON CONFLICT (database_id, object_id)
+        DO UPDATE SET
+            description = ?3
+        ''', (database_id, object_id, new_description,))
     return
 
 
