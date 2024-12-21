@@ -32,7 +32,6 @@ def view(db_id, ob_id):
     return render_template('view/index.html', obj=obj, cols=cols, idxs=idxs)
 
 
-# TODO: change to edit description information
 @app.route('/edit/<int:db_id>/<int:ob_id>', methods=['GET', 'PUT'])
 def edit_object_desc(db_id, ob_id):
     (conn, c) = db.get_cursor('database_objects.db')
@@ -56,7 +55,6 @@ def edit_object_desc(db_id, ob_id):
     return render_template('view/_partials/show_object.html', obj=obj)
 
 
-# TODO: change to edit description information
 @app.route('/edit/<int:db_id>/<int:ob_id>/<int:col_id>', methods=['GET', 'PUT'])
 def edit_column_desc(db_id, ob_id, col_id):
     (conn, c) = db.get_cursor('database_objects.db')
@@ -82,7 +80,6 @@ def edit_column_desc(db_id, ob_id, col_id):
 
 @app.route('/search', methods=['POST'])
 def search_tasks():
-    time.sleep(1)
     search_string = request.form.get('search')
     filter = request.form.get('filter')
     (conn, c) = db.get_cursor('database_objects.db')

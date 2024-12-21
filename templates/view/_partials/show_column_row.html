@@ -4,7 +4,7 @@
 	<td class="px-4 py-4">{{ col.4 }}</td>
 	<td class="px-4 py-4">{{ col.5 }}</td>
 	<td class="px-4 py-4">
-		<button id="col_row_{{ col.0 }}" class="font-medium text-blue-600 hover:underline" hx-put="{{ url_for('edit_column_desc', db_id=col.0, ob_id=col.1, col_id=col.2) }}" hx-include="#updated-desc" hx-swap="outerHTML" hx-trigger="confirmed" onclick="editDescPopUp(this.id, '{{col.3 }}', '{{ col.5 }}')">
+		<button id="col_row_{{ col.2 }}" class="font-medium text-blue-600 hover:underline" hx-put="{{ url_for('edit_column_desc', db_id=col.0, ob_id=col.1, col_id=col.2) }}" hx-include="#updated-desc" hx-swap="outerHTML" hx-trigger="confirmed" onclick="editDescPopUp(this.id, '{{col.3 }}', '{{ col.5 }}')">
 			Edit
 		</button>
 	</td>
