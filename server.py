@@ -1,4 +1,6 @@
 from flask import Flask, render_template, request
+from collections import defaultdict
+import json
 import time
 
 import utils.database_functions as db
@@ -87,3 +89,29 @@ def search_tasks():
     obj = c.fetchmany(50)
     conn.close()
     return render_template('home/_partials/search_results.html', obj=obj)
+
+
+if __name__ == "__main__":
+    list_of_tuples = [(6,2), (5,2), (2,0), (0,1), (1,3), (1,4)]
+    print(list_of_tuples)
+    d = defaultdict(list)
+    for e in list_of_tuples:
+        d[e[0]].append(str(e[1]))
+    list_of_dicts = [{'_name': str(k), '_deps': v} for k,v in d.items()]
+    print(list_of_dicts)
+    # list_of_dicts = [{'parent
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

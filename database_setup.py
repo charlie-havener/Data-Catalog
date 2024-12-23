@@ -106,6 +106,12 @@ def create_database():
     conn.commit()
 
     # TODO: create the table of Relationships and create a viewable DAG
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS dependencies (
+            parent_id INTEGER NOT NULL
+            , child_id INTEGER NOT NULL
+        )
+        ''')
 
     conn.close()
 
@@ -131,6 +137,9 @@ def query_database():
 
     c.execute('''SELECT * FROM column_descriptions LIMIT 5''')
     print("column_descriptions\n\t", c.fetchall())
+
+    c.execute('''SELECT * FROM dependencies LIMIT 5''')
+    print("dependencies\n\t", c.fetchall())
 
     conn.close()
 
@@ -202,27 +211,19 @@ def reset_data():
     c.execute('''INSERT INTO object_descriptions VALUES (?,?,?)''', (1,1,'ERP-Locations-Description'))
     c.execute('''INSERT INTO object_descriptions VALUES (?,?,?)''', (1,2,'really really really really really really really really really really really really really really really really really really really really really really really really really really long description'))
 
+    c.execute('''INSERT INTO dependencies VALUES(?,?)''', (6,2))
+    c.execute('''INSERT INTO dependencies VALUES(?,?)''', (5,2))
+    c.execute('''INSERT INTO dependencies VALUES(?,?)''', (2,0))
+    c.execute('''INSERT INTO dependencies VALUES(?,?)''', (0,1))
+    c.execute('''INSERT INTO dependencies VALUES(?,?)''', (1,3))
+    c.execute('''INSERT INTO dependencies VALUES(?,?)''', (1,4))
+
     conn.commit()
 
     return ''
 
 
 if __name__ == "__main__":
-    # create_database()
-    # reset_data()
-    
-
-    conn = sqlite3.connect('database_objects.db')
-    c = conn.cursor()
-    c.execute('''
-        DELETE FROM object_descriptions
-        WHERE database_id = 1 AND object_id = 2''')
-    conn.commit()
-    c.execute('''
-        INSERT INTO object_descriptions VALUES (?,?,?)
-        ''', (1,2,'really really really really really really really really really really really really really really really really really really really really really really really really really really long description'))
-    conn.commit()
-    conn.close()
-
-
+    create_database()
+    reset_data()
     query_database()
