@@ -6,3 +6,6 @@ venv/
 
 # ignore the pycache directory
 __pycache__/
+
+# node garbage
+node_modules/

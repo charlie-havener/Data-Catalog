@@ -7,7 +7,7 @@ import utils.database_functions as db
 
 # >flask --app server run --debug --port 3000
 app = Flask(__name__, static_url_path='/static')
-
+print('started')
 
 @app.route('/')
 def index():
@@ -91,27 +91,24 @@ def search_tasks():
     return render_template('home/_partials/search_results.html', obj=obj)
 
 
-if __name__ == "__main__":
-    list_of_tuples = [(6,2), (5,2), (2,0), (0,1), (1,3), (1,4)]
-    print(list_of_tuples)
-    d = defaultdict(list)
-    for e in list_of_tuples:
-        d[e[0]].append(str(e[1]))
-    list_of_dicts = [{'_name': str(k), '_deps': v} for k,v in d.items()]
-    print(list_of_dicts)
-    # list_of_dicts = [{'parent
+@app.route('/test')
+def test():
+    roots = [5]  # TOOD: make whatever the db item is
+    depth = 6
 
+    # need a base (root element with no parent)
+    data = [{'name': roots[0], 'parent': ''}]
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    while depth > 0:
+        (conn, c) = db.get_cursor('database_objects.db')
+        db.query_dependencies_upstream(c, roots)
+        t = c.fetchall()
+        c.close()
+        roots.clear()
+        for (parent, child) in t:
+            data.append({'name': child, 'parent': parent})
+            roots.append(child)
+        if len(roots) == 0:
+            break
+        depth -= 1
+    return render_template('test.html', data=data)

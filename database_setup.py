@@ -155,6 +155,7 @@ def reset_data():
     c.execute('''DELETE FROM index_columns''')
     c.execute('''DELETE FROM object_descriptions''')
     c.execute('''DELETE FROM column_descriptions''')
+    c.execute('''DELETE FROM dependencies''')
     conn.commit()
 
     # add some row
@@ -217,6 +218,7 @@ def reset_data():
     c.execute('''INSERT INTO dependencies VALUES(?,?)''', (0,1))
     c.execute('''INSERT INTO dependencies VALUES(?,?)''', (1,3))
     c.execute('''INSERT INTO dependencies VALUES(?,?)''', (1,4))
+    c.execute('''INSERT INTO dependencies VALUES(?,?)''', (1,7))
 
     conn.commit()
 
