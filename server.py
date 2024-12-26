@@ -93,22 +93,40 @@ def search_tasks():
 
 @app.route('/test')
 def test():
-    roots = [5]  # TOOD: make whatever the db item is
+    up_roots = [5]  # TODO: make whatever the db item is
+    down_roots = [3]
     depth = 6
 
     # need a base (root element with no parent)
-    data = [{'name': roots[0], 'parent': ''}]
+    up_data = [{'name': up_roots[0], 'parent': ''}]
+    down_data = [{'name': down_roots[0], 'parent': ''}]
 
-    while depth > 0:
+    tmp_depth = depth
+    while tmp_depth > 0:
         (conn, c) = db.get_cursor('database_objects.db')
-        db.query_dependencies_upstream(c, roots)
-        t = c.fetchall()
+        db.query_dependencies_upstream(c, up_roots)
+        up = c.fetchall()
         c.close()
-        roots.clear()
-        for (parent, child) in t:
-            data.append({'name': child, 'parent': parent})
-            roots.append(child)
-        if len(roots) == 0:
+        up_roots.clear()
+        for (parent, child) in up:
+            up_data.append({'name': child, 'parent': parent})
+            up_roots.append(child)
+        if len(up_roots) == 0:
             break
-        depth -= 1
-    return render_template('test.html', data=data)
+        tmp_depth -= 1
+
+    tmp_depth = depth
+    while tmp_depth > 0:
+        (conn, c) = db.get_cursor('database_objects.db')
+        db.query_dependencies_downstream(c, down_roots)
+        down = c.fetchall()
+        c.close()
+        down_roots.clear()
+        for (parent, child) in down:
+            down_data.append({'name': parent, 'parent': child})
+            down_roots.append(parent)
+        if len(down_roots) == 0:
+            break
+        tmp_depth -= 1
+
+    return render_template('test.html', up_data=up_data, down_data=down_data)

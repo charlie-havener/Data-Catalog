@@ -8,20 +8,24 @@
 	<body class="bg-white">
 		{{ macros.navbar() }}
 
-		{{ data }}
+		{{ up_data }}
+		{{ down_data }}
 
+		{{ macros.dependency_graph("upstream" , up_data) }}
+		{{ macros.dependency_graph("downstream", down_data) }}
+		
 		<div id = "container"></div>
 
 		<script>
 
-			const j = {{ data | tojson }};
+			const j = {{ up_data | tojson }};
 			const strat = d3.stratify()
 				.id(d => d.name)
 				.parentId(d => d.parent);
 			var root = strat(j);
 
 			const width = 928;
-			const dx = 30; // the height difference between rows
+			const dx = 45; // the height difference between rows
 			const dy = width / (root.height + 1);
 			
 			const tree = d3.tree().nodeSize([dx, dy]);
@@ -29,8 +33,8 @@
 			root.sort((a,b) => d3.ascending(a.data.name, b.data.name));
 			tree(root);
 
-			let x0 = Infinity;
-			let x1 = -x0;
+			var x0 = Infinity;
+			var x1 = -x0;
 			root.each(d => {
 				if (d.x > x1) x1 = d.x;
 				if (d.x < x0) x0 = d.x;
@@ -43,6 +47,7 @@
 				.attr("width", width)
 				.attr("height", height)
 				.attr("viewBox", [-dy / 3, x0 - dx, width, height])
+				.attr("transform", "scale(-1,1)")
 				.attr("style", "max-width: 100%; height: auto; font: 10px sans-serif;");
 
 			const link = svg.append("g")
@@ -66,16 +71,19 @@
 				.attr("id", d => `${d.data.name}`)
 				.attr("transform", d => `translate(${d.y}, ${d.x})`)
 				.on("mouseover", function(event, d) {
-					console.log("hover element with id", d.id);
+					console.log("over element with id", d.id);
 					for (child of this.children) {
-						d3.select(child).attr("fill", "red");
+						d3.select(child).attr("fill", "purple");
 					}
 				})
 				.on("mouseleave", function(event, d) {
-					console.log("hover element with id", d.id);
+					console.log("leave element with id", d.id);
 					for (child of this.children) {
 						d3.select(child).attr("fill", "#555");
 					}
+				})
+				.on("click", function(event, d) {
+					console.log("click element with id", d.id)
 				});
 
 			node.append("circle")
@@ -83,10 +91,12 @@
 				.attr("r", 6);
 
 			node.append("text")
-				.attr("dy", "0.31em") // x offset of text
-				.attr("x", d => d.children ? -10 : 10) // y offset of text
-				.attr("text-anchor", d => d.children ? "end" : "start")
+				.attr("dy", "1.50em") // x offset of text
+				//.attr("x", d => d.children ? -10 : 10) // y offset of text
+				.attr("text-anchor", "middle")
+				//.attr("text-anchor", d => d.children ? "end" : "start")
 				.text(d => d.data.name)
+				.attr("transform", "scale(-1,1)")
 				.attr("stroke", "white")
 				.attr("paint-order", "stroke");
 

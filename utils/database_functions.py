@@ -150,7 +150,6 @@ def query_col_desc_upsert(cursor, database_id, object_id, column_id, new_descrip
 
 
 def query_dependencies_upstream(cursor, ids):
-    print(ids)
     cursor.execute('''
         SELECT
             parent_id
@@ -167,6 +166,6 @@ def query_dependencies_downstream(cursor, ids):
             parent_id
             , child_id
         FROM dependencies
-        WHERE child_id IN ?1
-        ''', (id,))
+        WHERE child_id IN (%s)
+        ''' % ','.join('?' * len(ids)), ids)
     return
