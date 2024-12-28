@@ -3,7 +3,7 @@
 {% block content %}
 
 	<!-- searches when contents of the searchbox change (with 1s delay) or immediately when the radio button selection changes --!>
-	<form autocomplete="off" class="items-center max-w-lg mx-auto mt-6"
+	<form autocomplete="off" class="items-center mx-32 mt-6"
 		hx-post="/search" hx-trigger="input changed delay:600ms from:#search-box, change from:.search-radio, load" hx-target="#search-results" hx-indicator="#radio-indicator" hx-disabled-elt=".search-radio">
 
 		<div class="flex">
@@ -11,7 +11,7 @@
 				<div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
 					<svg class="w-4 h-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
 						<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-					</svg>	
+					</svg>
 				</div>
 				<input type="search" id="search-box" name="search" class="bg-gray-50 border-2 border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder="Begin typing to search..." />
 			</div>
@@ -24,16 +24,24 @@
 				<label for="filter-all" class="inline-flex items-center justify-between p-2 py-1 text-center text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-800 hover:bg-gray-200 hover:border-gray-300">All</label>
 			</li>
 			<li class="p-1">
-				<input type="radio" id="filter-tables" name="filter" value="U" class="hidden peer search-radio" required />
-				<label for="filter-tables" class="inline-flex items-center justify-between p-2 py-1 text-center text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-800 hover:bg-gray-200 hover:border-gray-300">Tables</label>
+				<input type="radio" id="filter-table" name="filter" value="1" class="hidden peer search-radio" required />
+				<label for="filter-table" class="inline-flex items-center justify-between p-2 py-1 text-center text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-800 hover:bg-gray-200 hover:border-gray-300">Tables</label>
 			</li>
 			<li class="p-1">
-				<input type="radio" id="filter-views" name="filter" value="V" class="hidden peer search-radio" required />
-				<label for="filter-views" class="inline-flex items-center justify-between p-2 py-1 text-center text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-800 hover:bg-gray-200 hover:border-gray-300">Views</label>
+				<input type="radio" id="filter-view" name="filter" value="2" class="hidden peer search-radio" required />
+				<label for="filter-view" class="inline-flex items-center justify-between p-2 py-1 text-center text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-800 hover:bg-gray-200 hover:border-gray-300">Views</label>
 			</li>
 			<li class="p-1">
-				<input type="radio" id="filter-sp" name="filter" value="P" class="hidden peer search-radio" required />
-				<label for="filter-sp" class="inline-flex items-center justify-between p-2 py-1 text-center text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-800 hover:bg-gray-200 hover:border-gray-300">Stored Procedures</label>
+				<input type="radio" id="filter-storedprocedure" name="filter" value="3" class="hidden peer search-radio" required />
+				<label for="filter-storedprocedure" class="inline-flex items-center justify-between p-2 py-1 text-center text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-800 hover:bg-gray-200 hover:border-gray-300">Stored Procedures</label>
+			</li>
+			<li class="p-1">
+				<input type="radio" id="filter-powerbi" name="filter" value="4" class="hidden peer search-radio" required />
+				<label for="filter-powerbi" class="inline-flex items-center justify-between p-2 py-1 text-center text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-800 hover:bg-gray-200 hover:border-gray-300">PowerBI</label>
+			</li>
+			<li class="p-1">
+				<input type="radio" id="filter-ssrs" name="filter" value="5" class="hidden peer search-radio" required />
+				<label for="filter-ssrs" class="inline-flex items-center justify-between p-2 py-1 text-center text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-800 hover:bg-gray-200 hover:border-gray-300">SSRS</label>
 			</li>
 		</ul>
 
@@ -44,12 +52,6 @@
 			<thead class="text-xs text-gray-700 uppercase bg-gray-300 text-left">
 				<tr>
 					<th scope="col" class="px-6 py-3">
-						Database
-					</th>
-					<th scope="col" class="px-6 py-3">
-						Schema
-					</th>
-					<th scope="col" class="px-6 py-3">
 						Object
 					</th>
 					<th scope="col" class="px-6 py-3">
@@ -58,7 +60,7 @@
 					<th scope="col" class="px-6 py-3">
 						Description
 					</th>
-					<th scope="col" class="px-6 py-3">
+					<th scope="col" class="px-6 py-3 max-w-xs">
 						Action
 					</th>
 				</tr>

@@ -28,133 +28,146 @@ def query_search(cursor, search_string, filter):
         param_list = ('%' + search_string + '%',)
     else:
         predicate = 'AND type = ?'
-        param_list = ('%' + search_string + '%', filter,)
+        param_list = ('%' + search_string + '%', int(filter),)
 
     cursor.execute('''
         SELECT
-            o.database_id
-            , o.object_id
-            , o.database_name
-            , o.schema_name
-            , o.object_name
-            , o.type_desc
+            o.id
+            , o.name
+            , ot.type_name
             , od.description
-        FROM objects as o
-        LEFT JOIN object_descriptions as od
+        FROM
+            objects as o
+        LEFT JOIN
+            object_descriptions as od
         ON
-            o.database_id = od.database_id
-            AND o.object_id = od.object_id
+            o.id = od.object_id
+        LEFT JOIN
+            object_types as ot
+        ON
+            o.type = ot.id
         WHERE
-            object_name LIKE ?''' + predicate, param_list)
+            o.name LIKE ?''' + predicate, param_list)
     return
 
 
-def query_object_info(cursor, database_id, object_id):
+def query_object_info(cursor, object_id):
     cursor.execute('''
         SELECT
-            o.database_id
-            , o.object_id
-            , o.database_name
-            , o.schema_name
-            , o.object_name
-            , o.type
-            , o.type_desc
+            o.id
+            , o.name
+            , ot.type_name
             , od.description
-        FROM objects as o
-        LEFT JOIN object_descriptions as od
-            ON o.database_id = od.database_id
-                AND o.object_id = od.object_id
+        FROM
+            objects as o
+        LEFT JOIN
+            object_descriptions as od
+        ON
+            o.id = od.object_id
+        LEFT JOIN
+            object_types as ot
+        ON
+            o.type = ot.id
         WHERE
-            o.database_id = ?
-            AND o.object_id = ?
-        ''', (database_id, object_id,))
+            o.id = ?
+        ''', (object_id,))
     return
 
 
-def query_columns_info(cursor, database_id, object_id):
+def query_columns_info(cursor, object_id):
     cursor.execute('''
         SELECT
-            c.column_id
-            , c.column_name
-            , c.type_name
+            c.id
+            , c.name
+            , c.type
+            , c.length
+            , c.precision
+            , c.scale
+            , c.is_nullable
             , cd.description
-        FROM columns as c
-        LEFT JOIN column_descriptions as cd
-            ON c.database_id = cd.database_id
-                AND c.object_id = cd.object_id
-                AND c.column_id = cd.column_id
+        FROM
+            columns as c
+        LEFT JOIN
+            column_descriptions as cd
+        ON
+            c.id = cd.column_id
         WHERE
-            c.database_id = ?
-            AND c.object_id = ?
-        ''', (database_id, object_id,))
+            c.object_id = ?
+        ''', (object_id,))
     return
 
 
-def query_column_info(cursor, database_id, object_id, column_id):
+def query_column_info(cursor, column_id):
     cursor.execute('''
         SELECT
-            c.database_id
-            , c.object_id
-            , c.column_id
-            , c.column_name
-            , c.type_name
+            c.id
+            , c.name
+            , c.type
+            , c.length
+            , c.precision
+            , c.scale
+            , c.is_nullable
             , cd.description
-        FROM columns as c
-        LEFT JOIN column_descriptions as cd
-            ON c.database_id = cd.database_id
-                AND c.object_id = cd.object_id
-                AND c.column_id = cd.column_id
+        FROM
+            columns as c
+        LEFT JOIN
+            column_descriptions as cd
+        ON
+            c.id = cd.column_id
         WHERE
-            c.database_id = ?
-            AND c.object_id = ?
-            AND c.column_id = ?
-        ''', (database_id, object_id, column_id))
+            c.id = ?
+        ''', (column_id,))
     return
 
 
-def query_indexes_info(cursor, database_id, object_id):
+def query_indexes_info(cursor, object_id):
     cursor.execute('''
         SELECT
-            i.index_id
-            , i.index_name
-            , i.type_name
+            i.id
+            , i.name
+            , i.type
             , i.is_primary_key
-        FROM indexes as i
+        FROM
+            indexes as i
         WHERE
-            i.database_id = ?
-            AND i.object_id = ?
-        ''', (database_id, object_id,))
+            i.object_id = ?
+        ''', (object_id,))
     return
 
 
-def query_desc_upsert(cursor, database_id, object_id, new_description):
+def query_object_desc_upsert(cursor, object_id, new_description):
     cursor.execute('''
-        INSERT INTO object_descriptions (database_id, object_id, description)
-        VALUES (?1,?2,?3)
-        ON CONFLICT (database_id, object_id)
-        DO UPDATE SET
-            description = ?3
-        ''', (database_id, object_id, new_description,))
+        INSERT INTO object_descriptions (object_id, description)
+        VALUES (?1,?2)
+        ON CONFLICT (object_id)
+        DO UPDATE SET description = ?2
+        ''', (object_id, new_description,))
     return
 
 
-def query_col_desc_upsert(cursor, database_id, object_id, column_id, new_description):
+def query_col_desc_upsert(cursor, column_id, new_description):
     cursor.execute('''
-        INSERT INTO column_descriptions (database_id, object_id, column_id, description)
-        VALUES (?1,?2,?3,?4)
-        ON CONFLICT (database_id, object_id, column_id)
+        INSERT INTO column_descriptions (column_id, description)
+        VALUES (?1,?2)
+        ON CONFLICT (column_id)
         DO UPDATE SET
-            description = ?4
-        ''', (database_id, object_id, column_id, new_description,))
+            description = ?2
+        ''', (column_id, new_description,))
     return
 
 
 def query_dependencies_upstream(cursor, ids):
     cursor.execute('''
         SELECT
-            parent_id
-            , child_id
-        FROM dependencies
+            r.parent_id
+            , o.name
+            , r.child_id
+            , o2.name
+        FROM relationships as r
+        LEFT JOIN objects as o
+        ON r.parent_id = o.id
+        LEFT JOIN objects as o2
+        ON r.child_id = o2.id
         WHERE parent_id IN (%s)
         ''' % ','.join('?' * len(ids)), ids)
     return
@@ -163,9 +176,15 @@ def query_dependencies_upstream(cursor, ids):
 def query_dependencies_downstream(cursor, ids):
     cursor.execute('''
         SELECT
-            parent_id
-            , child_id
-        FROM dependencies
+            r.parent_id
+            , o.name
+            , r.child_id
+            , o2.name
+        FROM relationships as r
+        LEFT JOIN objects as o
+        ON r.parent_id = o.id
+        LEFT JOIN objects as o2
+        ON r.child_id = o2.id
         WHERE child_id IN (%s)
         ''' % ','.join('?' * len(ids)), ids)
     return

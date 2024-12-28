@@ -8,85 +8,70 @@
 
 <div id="object_definition" class="block p-6 my-8">
 	<h5 class="text-2xl font-bold tracking-tight text-gray-900">
-		{{ obj.2 }}.{{ obj.3 }}.{{ obj.4 }}
-		<button id="desc_update" class="font-normal text-sm ml-4 text-blue-600 hover:underline" hx-put="{{ url_for('edit_object_desc', db_id=obj.0, ob_id=obj.1) }}" hx-target="#object_definition" hx-include="#updated-desc" hx-swap="outerHTML" hx-trigger="confirmed" onclick="editDescPopUp(this.id, '{{ obj.2 }}.{{ obj.3 }}.{{ obj.4 }}', '{{ obj.7 }}')">Edit</button>
+		{{ obj.1 }}
+		<button id="desc_update" class="font-normal text-sm ml-4 text-blue-600 hover:underline" hx-put="{{ url_for('edit_object_desc', object_id=obj.0) }}" hx-target="#object_definition" hx-include="#updated-desc" hx-swap="outerHTML" hx-trigger="confirmed" onclick="editDescPopUp(this.id, '{{ obj.1 }}', '{{ obj.3 }}')">Edit</button>
 	</h5>
-	<p class="mb-4 font-semibold tracking-tight text-gray-400">{{ obj.6 }}</h5>
-	<p class="font-normal text-gray-700">{{ obj.7 }}</p>
+	<p class="mb-2 font-semibold tracking-tight text-gray-400">{{ obj.2 }}</h5>
+	<p class="font-normal text-gray-700">{{ obj.3 }}</p>
 </div>
 
 
 <div class="mb-4 border-b border-gray-200 mx-8">
     <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="object-details-tabs-buttons" data-tabs-active-classes="text-purple-600 hover:text-purple-600 border-purple-600" data-tabs-inactive-classes="text-gray-500 hover:text-gray-600 border-gray-200 hover:border-gray-400">
-
-		{% if obj.5 == 'U' or obj.5 == 'V' %}
-        <li class="me-2">
-            <button class="tab-button inline-block p-4 border-b-2 rounded-t-lg text-purple-600 hover:text-purple-600 border-purple-600" id="column-tab-btn" data-tabs-target="column-tab-data" type="button" onclick="updateTabs(this)">Columns</button>
-        </li>
-		{% endif %}
-
-		{% if obj.5 == 'U' %}
-        <li class="me-2">
-            <button class="tab-button inline-block p-4 border-b-2 rounded-t-lg text-gray-500 hover:text-gray-600 border-gray-200 hover:border-gray-400" id="index-tab-btn" data-tabs-target="index-tab-data" type="button" onclick="updateTabs(this)">Indexes</button>
-        </li>
-		{% endif %}
-
-        <li class="me-2">
-            <button class="tab-button inline-block p-4 border-b-2 rounded-t-lg text-gray-500 hover:text-gray-600 border-gray-200 hover:border-gray-400" id="dependency-tab-btn" data-tabs-target="dependency-tab-data" type="button" onclick="updateTabs(this)">Dependencies</button>
-        </li>
-
-        <li>
-            <button class="tab-button inline-block p-4 border-b-2 rounded-t-lg text-gray-500 hover:text-gray-600 border-gray-200 hover:border-gray-400" id="dependent-tab-btn" data-tabs-target="dependent-tab-data" type="button" onclick="updateTabs(this)">Dependents</button>
-        </li>
-
-        <li>
-            <button class="tab-button inline-block p-4 border-b-2 rounded-t-lg text-gray-500 hover:text-gray-600 border-gray-200 hover:border-gray-400" id="additional-tab-btn" data-tabs-target="additional-tab-data" type="button" onclick="updateTabs(this)">Additional Info</button>
-        </li>
-
-		{% if obj.5 == 'U' or obj.5 == 'V' %}
-        <li>
-            <button class="tab-button inline-block p-4 border-b-2 rounded-t-lg text-gray-500 hover:text-gray-600 border-gray-200 hover:border-gray-400" id="query-tab-btn" data-tabs-target="query-tab-data" type="button" onclick="updateTabs(this)">Queries</button>
-        </li>
-		{% endif %}
-
+			<li class="me-2">
+				<button class="tab-button inline-block p-4 border-b-2 rounded-t-lg text-purple-600 hover:text-purple-600 border-purple-600" id="column-tab-btn" data-tabs-target="column-tab-data" type="button" onclick="updateTabs(this)">Columns</button>
+			</li>
+			<li class="me-2">
+				<button class="tab-button inline-block p-4 border-b-2 rounded-t-lg text-gray-500 hover:text-gray-600 border-gray-200 hover:border-gray-400" id="index-tab-btn" data-tabs-target="index-tab-data" type="button" onclick="updateTabs(this)">Indexes</button>
+			</li>
+			<li class="me-2">
+				<button class="tab-button inline-block p-4 border-b-2 rounded-t-lg text-gray-500 hover:text-gray-600 border-gray-200 hover:border-gray-400" id="dependency-tab-btn" data-tabs-target="dependency-tab-data" type="button" onclick="updateTabs(this)">Dependencies</button>
+			</li>
+			<li>
+				<button class="tab-button inline-block p-4 border-b-2 rounded-t-lg text-gray-500 hover:text-gray-600 border-gray-200 hover:border-gray-400" id="dependent-tab-btn" data-tabs-target="dependent-tab-data" type="button" onclick="updateTabs(this)">Dependents</button>
+			</li>
     </ul>
 </div>
 <div id="object-details-tabs-data">
-
-	{% if obj.5 == 'U' or obj.5 == 'V' %}
 	<div class="tab-data p-4 rounded-lg" id="column-tab-data">
 		<div class="relative overflow-x-auto shadow-md sm:rounded-lg mx-8 my-10">
 			<table class="w-full text-sm text-left text-gray-500">
 				<thead class="text-xs text-gray-700 uppercase bg-gray-300 text-left">
 					<tr>
-						<th scope="col" class="px-6 py-3">Order</th>
+						<th scope="col" class="px-6 py-3">ID</th>
 						<th scope="col" class="px-6 py-3">Name</th>
 						<th scope="col" class="px-6 py-3">Type</th>
+						<th scope="col" class="px-6 py-3">Length</th>
+						<th scope="col" class="px-6 py-3">Precision</th>
+						<th scope="col" class="px-6 py-3">Scale</th>
+						<th scope="col" class="px-6 py-3">Nullable</th>
 						<th scope="col" class="px-6 py-3">Description</th>
-						<th scope="col" class="px-6 py-3 max-w-xs">Edit</th>
+						<th scope="col" class="px-6 py-3">Edit</th>
 					</tr>
 				</thead>
 				<tbody hx-target="closest tr">
 				{% for col in cols %}
-					<tr class="bg-white border-b hover:bg-gray-200">
-						<td class="px-4 py-4">{{ col.0 }}</td>
-						<td class="px-4 py-4">{{ col.1 }}</td>
-						<td class="px-4 py-4">{{ col.2 }}</td>
-						<td class="px-4 py-4">{{ col.3 }}</td>
-						<td class="px-4 py-4">
-							<button id="col_row_{{ col.0 }}" class="font-medium text-blue-600 hover:underline" hx-put="{{ url_for('edit_column_desc', db_id=obj.0, ob_id=obj.1, col_id=col.0) }}" hx-include="#updated-desc" hx-swap="outerHTML" hx-trigger="confirmed" onclick="editDescPopUp(this.id, '{{ obj.2 }}.{{ obj.3 }}.{{ obj.4 }}[{{ col.1 }}]', '{{ col.3 }}')">
-								Edit
-							</button>
-						</td>
-					</tr>
+				<tr class="bg-white border-b hover:bg-gray-200">
+					<td class="px-4 py-4">{{ col.0 }}</td>
+					<td class="px-4 py-4">{{ col.1 }}</td>
+					<td class="px-4 py-4">{{ col.2 }}</td>
+					<td class="px-4 py-4">{{ col.3 }}</td>
+					<td class="px-4 py-4">{{ col.4 }}</td>
+					<td class="px-4 py-4">{{ col.5 }}</td>
+					<td class="px-4 py-4">{{ col.6 }}</td>
+					<td class="px-4 py-4">{{ col.7 }}</td>
+					<td class="px-4 py-4">
+						<button id="col_row_{{ col.0 }}" class="font-medium text-blue-600 hover:underline" hx-put="{{ url_for('edit_column_desc', column_id=col.0) }}" hx-include="#updated-desc" hx-swap="outerHTML" hx-trigger="confirmed" onclick="editDescPopUp(this.id, '{{ col.1 }}', '{{ col.7 }}')">
+							Edit
+						</button>
+					</td>
+				</tr>
 				{% endfor %}
 				</tbody>
 			</table>
 		</div>
-    </div>
-	{% endif %}
+  </div>
 
-	{% if obj.5 == 'U' %}
 	<div class="tab-data hidden p-4 rounded-lg" id="index-tab-data">
 		<div class="relative overflow-x-auto shadow-md sm:rounded-lg mx-8 my-10">
 			<table class="w-full text-sm text-left text-gray-500">
@@ -100,40 +85,41 @@
 				</thead>
 				<tbody hx-target="closest tr">
 				{% for idx in idxs %}
-					<tr class="bg-white border-b hover:bg-gray-200">
-						<td class="px-4 py-4">{{ idx.0 }}</td>
-						<td class="px-4 py-4">{{ idx.1 }}</td>
-						<td class="px-4 py-4">{{ idx.2 }}</td>
-						<td class="px-4 py-4">{{ idx.3 }}</td>
-					</tr>
+				<tr class="bg-white border-b hover:bg-gray-200">
+					<td class="px-4 py-4">{{ idx.0 }}</td>
+					<td class="px-4 py-4">{{ idx.1 }}</td>
+					<td class="px-4 py-4">{{ idx.2 }}</td>
+					<td class="px-4 py-4">{{ idx.3 }}</td>
+				</tr>
 				{% endfor %}
 				</tbody>
 			</table>
 		</div>
     </div>
-	{% endif %}
 
-    <div class="tab-data hidden p-4 rounded-lg bg-gray-50" id="dependency-tab-data">
-        <p class="text-sm text-gray-500">dependency placeholder text</p>
+    <div class="tab-data hidden p-4 rounded-lg" id="dependency-tab-data">
+      <p class="text-sm text-gray-500 ml-12">* depth is limited to a maximum of 6</p>
+			{{ down_data }}
+			{{ macros.dependency_graph("downstream", down_data) }}
     </div>
 
-    <div class="tab-data hidden p-4 rounded-lg bg-gray-50" id="dependent-tab-data">
-        <p class="text-sm text-gray-500">dependent placeholder text</p>
+    <div class="tab-data hidden p-4 rounded-lg" id="dependent-tab-data">
+      <p class="text-sm text-gray-500 ml-12">* depth is limited to a maximum of 6</p>
+			{{ up_data }}
+			{{ macros.dependency_graph("upstream", up_data) }}
     </div>
 
-    <div class="tab-data hidden p-4 rounded-lg bg-gray-50" id="additional-tab-data">
-        <p class="text-sm text-gray-500">additional placeholder text</p>
+    <div class="tab-data hidden p-4 rounded-lg" id="additional-tab-data">
+      <p class="text-sm text-gray-500">additional placeholder text</p>
     </div>
 
-	{% if obj.5 == 'U' or obj.5 == 'V' %}
-    <div class="tab-data hidden p-4 rounded-lg bg-gray-50" id="query-tab-data">
-        <p class="text-sm text-gray-500">query placeholder text</p>
+    <div class="tab-data hidden p-4 rounded-lg" id="query-tab-data">
+      <p class="text-sm text-gray-500">query placeholder text</p>
     </div>
-	{% endif %}
 </div>
 
 <!-- 
-	active: text-purple-600 hover:text-purple-600 border-purple-600
+  active: text-purple-600 hover:text-purple-600 border-purple-600
   inactive: text-gray-500 hover:text-gray-600 border-gray-100 hover:border-gray-300
 --!>
 

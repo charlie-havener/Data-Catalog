@@ -47,11 +47,3 @@ function updateTabs(e) {
 		e.classList.add(ac);
 	}
 }
-
-// var buttonTabElements = document.getElementsByClassName("tab-button");
-// for (var i = 0; i < buttonTabElements.length; i++) {
-// 	console.log(buttonTabElements[i]);
-// 	buttonTabElements[i].classList.remove("notreal");
-// 	buttonTabElements[i].classList.add("notreal");
-// }
-
