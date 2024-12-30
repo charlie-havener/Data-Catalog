@@ -32,8 +32,8 @@ def view(object_id):
     depth = 6
 
     # need a base (root element with no parent)
-    up_data = [{'name': obj[1].replace(" ", "_"), 'parent': ''}]
-    down_data = [{'name': obj[1].replace(" ", "_"), 'parent': ''}]
+    up_data = [{'name': obj[1], 'parent': '', 'id': obj[0]}]
+    down_data = [{'name': obj[1], 'parent': '', 'id': obj[0]}]
 
     tmp_depth = depth
     while tmp_depth > 0:
@@ -41,7 +41,7 @@ def view(object_id):
         up = c.fetchall()
         up_roots.clear()
         for (parent_id, parent_name, child_id, child_name) in up:
-            up_data.append({'name': child_name.replace(" ", "_"), 'parent': parent_name.replace(" ", "_")})
+            up_data.append({'name': child_name, 'parent': parent_name, 'id': child_id})
             up_roots.append(child_id)
         if len(up_roots) == 0:
             break
@@ -53,7 +53,7 @@ def view(object_id):
         down = c.fetchall()
         down_roots.clear()
         for (parent_id, parent_name, child_id, child_name) in down:
-            down_data.append({'name': parent_name, 'parent': child_name})
+            down_data.append({'name': parent_name, 'parent': child_name, 'id': parent_id})
             down_roots.append(parent_id)
         if len(down_roots) == 0:
             break
