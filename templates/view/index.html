@@ -99,23 +99,14 @@
 
     <div class="tab-data hidden p-4 rounded-lg" id="dependency-tab-data">
       <p class="text-sm text-gray-500 ml-12">* depth is limited to a maximum of 6</p>
-			{{ down_data }}
 			{{ macros.dependency_graph("downstream", down_data) }}
     </div>
 
     <div class="tab-data hidden p-4 rounded-lg" id="dependent-tab-data">
       <p class="text-sm text-gray-500 ml-12">* depth is limited to a maximum of 6</p>
-			{{ up_data }}
 			{{ macros.dependency_graph("upstream", up_data) }}
     </div>
 
-    <div class="tab-data hidden p-4 rounded-lg" id="additional-tab-data">
-      <p class="text-sm text-gray-500">additional placeholder text</p>
-    </div>
-
-    <div class="tab-data hidden p-4 rounded-lg" id="query-tab-data">
-      <p class="text-sm text-gray-500">query placeholder text</p>
-    </div>
 </div>
 
 <!-- 

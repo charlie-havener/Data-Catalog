@@ -103,19 +103,16 @@
 					// for right->left and left->right swapping should be either d.y or width-d.y
 					.attr("transform", d => `translate(${("{{ kind }}" == "upstream" ? 2 * d.y : width) - d.y}, ${d.x})`)
 					.on("mouseover", function(event, d) {
-						console.log("over element with id", d.data.id);
 						for (child of this.children) {
 							d3.select(child).attr("fill", "purple");
 						}
 					})
 					.on("mouseleave", function(event, d) {
-						console.log("leave element with id", d.data.id);
 						for (child of this.children) {
 							d3.select(child).attr("fill", "#555");
 						}
 					})
 					.on("click", function(event, d) {
-						console.log("click element with id", d.data.id);
 						window.location.href = `/view/object/${d.data.id}`;
 					});
 
