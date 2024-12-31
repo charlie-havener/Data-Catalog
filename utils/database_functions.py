@@ -188,3 +188,17 @@ def query_dependencies_downstream(cursor, ids):
         WHERE child_id IN (%s)
         ''' % ','.join('?' * len(ids)), ids)
     return
+
+
+def query_user_object_types(cursor):
+    cursor.execute('''
+        SELECT
+            type_name
+        FROM
+            object_types
+        WHERE
+            source = "user"
+        ORDER BY
+            type_name
+    ''')
+    return

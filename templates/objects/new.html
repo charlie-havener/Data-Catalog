@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<button type="submit" form="new-object-form">Submit</button>
+
+<div class="mt-20 mb-6 mx-10">
+	<h1 class="text-center text-xl font-bold text-gray-900 rounded-md">New Object</h1>
+	<div class="text-xs text-gray-500 mr-6 text-right">
+		<span class="text-red-500 font-bold text-xs"> * </span>
+		required fields
+	</div>
+</div>
+
+<form autocomplete="off" id="new-object-form" class="mx-10">
+	<div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2 mb-6">
+
+		<div>
+			<label for="object_name" class="block mb-2 text-sm font-medium text-gray-900">
+				Name
+				<span class="text-red-500 font-bold"> *</span>
+			</label>
+			<input type="text" id="object_name" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Object Name"></input>
+		</div>
+
+		<div>
+			<label for="object_type" class="block mb-2 text-sm font-medium text-gray-900">
+				Object Type
+				<span class="text-red-500 font-bold"> *</span>
+			</label>
+			<select id="object_type" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+				<option disabled selected value hidden>-- Select an Option --</option>
+				{% for t in types %}
+				<option>{{ t.0 }}</option>
+				{% endfor %}
+			</select>
+		</div>
+
+		<div>
+			<label for="object_owner" class="block mb-2 text-sm font-medium text-gray-900">Owner</label>
+			<input type="text" id="object_owner" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Owner Name"></input>
+		</div>
+
+		<div>
+			<label for="object_name" class="block mb-2 text-sm font-medium text-gray-900">Developer</label>
+			<input type="text" id="object_name" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Developer Name"></input>
+		</div>
+
+		<div class="col-span-2">
+			<label for="link" class="block mb-2 text-sm font-medium text-gray-900">Link</label>
+			<input type="url" id="link" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="www.example.com"></input>
+		</div>
+
+		<div class="col-span-2">
+			<label for="object_description" class="block mb-2 text-sm font-medium text-gray-900">Description</label>
+			<textarea id="object_description" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Description of the object..."></textarea>
+		</div>
+
+	</div>
+
+	<label id="dependency_label" for="dependency_table" class="block mb-3 text-sm font-medium text-gray-900">
+		Dependencies
+		<div class=" my-1 text-xs text-gray-500">
+			<p class="ml-2">The things that this new object <span class="font-bold">directly</span> depends on</p>
+		</div>
+	</label>
+	<div id="dependency_table" class="relative overflow-x-auto shadow-md sm:rounded-lg">
+		<table class="w-full text-sm text-left text-gray-500 table-fixed">
+			<thead class="text-xs text-gray-700 uppercase bg-gray-300 text-left">
+				<tr>
+					<th scope="col" class="px-6 py-2">Object</th>
+					<th scope="col" class="px-6 py-2 w-1/6">Type</th>
+					<th scope="col" class="px-6 py-2 w-1/12">Action</th>
+				</tr>
+			</thead>
+			<tbody id="object_dependency_rows">
+				<tr class="bg-white border-b hover:bg-gray-200">
+					<td class="px-4 py-2">aa</td>
+					<td class="px-4 py-2">Table</td>
+					<td class="px-4 py-2 text-center font-medium text-blue-600 hover:underline">
+						<button type="button" onclick="return this.parentNode.parentNode.remove();">Remove</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+</form>
+
+	<!-- searches when contents of the searchbox change (with 1s delay) or immediately when the radio button selection changes --!>
+	<form autocomplete="off" class="items-center mx-32 mt-16"
+		hx-post="/search_add" hx-trigger="input changed delay:600ms from:#search-box, change from:.search-radio, load" hx-target="#search-results" hx-indicator="#radio-indicator" hx-disabled-elt=".search-radio">
+
+		<div class="flex">
+			<div class="relative w-full">
+				<div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+					<svg class="w-4 h-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+						<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+					</svg>
+				</div>
+				<input type="search" id="search-box" name="search" class="bg-gray-50 border-2 border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder="Begin typing to search..." />
+			</div>
+			<img id="radio-indicator" class="htmx-indicator h-12" src="/static/search.svg" alt="loading"/>
+		</div>
+
+		<ul class="flex">
+			<li class="p-1">
+				<input type="radio" id="filter-all" name="filter" value="All" class="hidden peer search-radio" checked required />
+				<label for="filter-all" class="inline-flex items-center justify-between p-2 py-1 text-center text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-800 hover:bg-gray-200 hover:border-gray-300">All</label>
+			</li>
+			<li class="p-1">
+				<input type="radio" id="filter-table" name="filter" value="1" class="hidden peer search-radio" required />
+				<label for="filter-table" class="inline-flex items-center justify-between p-2 py-1 text-center text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-800 hover:bg-gray-200 hover:border-gray-300">Tables</label>
+			</li>
+			<li class="p-1">
+				<input type="radio" id="filter-view" name="filter" value="2" class="hidden peer search-radio" required />
+				<label for="filter-view" class="inline-flex items-center justify-between p-2 py-1 text-center text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-800 hover:bg-gray-200 hover:border-gray-300">Views</label>
+			</li>
+			<li class="p-1">
+				<input type="radio" id="filter-storedprocedure" name="filter" value="3" class="hidden peer search-radio" required />
+				<label for="filter-storedprocedure" class="inline-flex items-center justify-between p-2 py-1 text-center text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-800 hover:bg-gray-200 hover:border-gray-300">Stored Procedures</label>
+			</li>
+			<li class="p-1">
+				<input type="radio" id="filter-powerbi" name="filter" value="4" class="hidden peer search-radio" required />
+				<label for="filter-powerbi" class="inline-flex items-center justify-between p-2 py-1 text-center text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-800 hover:bg-gray-200 hover:border-gray-300">PowerBI</label>
+			</li>
+			<li class="p-1">
+				<input type="radio" id="filter-ssrs" name="filter" value="5" class="hidden peer search-radio" required />
+				<label for="filter-ssrs" class="inline-flex items-center justify-between p-2 py-1 text-center text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-800 hover:bg-gray-200 hover:border-gray-300">SSRS</label>
+			</li>
+		</ul>
+
+	</form>
+
+	<div class="relative overflow-x-auto shadow-md sm:rounded-lg mx-10 mt-4">
+		<table class="w-full text-sm text-left text-gray-500 table-fixed">
+			<thead class="text-xs text-gray-700 uppercase bg-gray-300 text-left">
+				<tr>
+					<th scope="col" class="px-6 py-2">
+						Object
+					</th>
+					<th scope="col" class="px-6 py-2 w-1/6">
+						Type
+					</th>
+					<th scope="col" class="px-6 py-2 w-1/12">
+						Action
+					</th>
+				</tr>
+			</thead>
+			<tbody id="search-results">
+			</tbody>
+		</table>
+	</div>
+
+{% endblock %}

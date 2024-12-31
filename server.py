@@ -118,3 +118,39 @@ def search_tasks():
     obj = c.fetchmany(50)
     conn.close()
     return render_template('home/_partials/search_results.html', obj=obj)
+
+
+@app.route('/search_add', methods=['POST'])
+def search_tasks_add():
+    search_string = request.form.get('search')
+    filter = request.form.get('filter')
+    (conn, c) = db.get_cursor('data_catalog.db')
+    db.query_search(c, search_string, filter)
+    obj = c.fetchmany(50)
+    conn.close()
+    return render_template('objects/_partials/search_results.html', obj=obj)
+
+
+@app.route('/add_dependency/<int:object_id>', methods=['GET'])
+def add_dependency(object_id):
+    print(object_id)
+    (conn, c) = db.get_cursor('data_catalog.db')
+    db.query_object_info(c, object_id)
+    obj = c.fetchone()
+    conn.close()
+    return render_template('objects/_partials/search_add.html', obj=obj)
+
+
+@app.route('/objects/new_object', methods=['GET'])
+def new_object():
+    (conn, c) = db.get_cursor('data_catalog.db')
+    db.query_user_object_types(c)
+    types = c.fetchall()
+    conn.close()
+    return render_template('objects/new.html', types=types)
+
+
+@app.route('/objects/edit_object/<int:object_id>', methods=['GET'])
+def edit_object():
+    # TODO: make sure object is a user type otherwise 404
+    return

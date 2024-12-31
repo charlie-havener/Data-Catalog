@@ -10,6 +10,9 @@ def create_database():
         CREATE TABLE IF NOT EXISTS object_types (
             id INTEGER PRIMARY KEY AUTOINCREMENT
             , type_name TEXT UNIQUE NOT NULL
+            , source TEXT NOT NULL
+
+            , CHECK (source IN ("system", "user"))
         )
     ''')
 
@@ -133,13 +136,13 @@ def add_base_data():
 
     c.execute('''
         INSERT INTO object_types
-            (type_name)
+            (type_name, source)
         VALUES
-            ("Table")
-            , ("View")
-            , ("Stored Procedure")
-            , ("PowerBI")
-            , ("SSRS")
+            ("Table", "system")
+            , ("View", "system")
+            , ("Stored Procedure", "system")
+            , ("PowerBI", "user")
+            , ("SSRS", "user")
     ''')
 
     c.execute('''

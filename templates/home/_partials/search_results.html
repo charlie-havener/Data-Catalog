@@ -1,16 +1,16 @@
 {% for o in obj %}
 
 <tr class="bg-white border-b hover:bg-gray-200">
-	<td class="px-4 py-4">
+	<td class="px-4 py-3">
 		{{ o.1 }}
 	</td>
-	<td class="px-4 py-4">
+	<td class="px-4 py-3">
 		{{ o.2 }}
 	</td>
-	<td class="px-4 py-4 break-words">
+	<td class="px-4 py-3 break-words">
 		{{ o.3 }}
 	</td>
-	<td class="px-4 py-4">
+	<td class="px-4 py-3 text-center">
 		<a href="{{ url_for('view', object_id=o.0) }}" class="font-medium text-blue-600 hover:underline">
 			View
 		</a>
