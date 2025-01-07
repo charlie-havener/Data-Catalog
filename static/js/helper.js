@@ -20,6 +20,69 @@ function editDescPopUp(clicked_id, editable_name, current_desc) {
 	})
 }
 
+function validateNewObjectForm() {
+	console.log("submitted");
+	let valid = true;
+
+	let valid_classes = [
+		"bg-gray-50",
+		"border",
+		"border-gray-300",
+		"text-gray-900",
+		"text-sm",
+		"rounded-lg",
+		"focus-visible:outline",
+		"focus-visible:outline-blue-500",
+		"focus:border-blue-500",
+		"block",
+		"w-full",
+		"p-2.5",
+	];
+	let invalid_classes = [
+		"bg-red-50",
+		"border",
+		"border-red-500",
+		"text-red-900",
+		"placeholder-red-700",
+		"text-sm",
+		"rounded-lg",
+		"focus-visible:outline",
+		"focus-visible:outline-red-500",
+		"focus:border-red-500",
+		"block",
+		"w-full",
+		"p-2.5",
+	];
+
+	// only name and type are requried
+	let object_name = document.getElementById("object-name");
+	object_name.classList.remove(...object_name.classList);
+	if (object_name.value == "") {
+		valid = false
+		object_name.classList.add(...invalid_classes);
+	}
+	else {
+		object_name.classList.add(...valid_classes);
+	}
+
+	let object_type = document.getElementById("object-type");
+	object_type.classList.remove(...object_type.classList);
+	if (object_type.value == "") {
+		valid = false
+		object_type.classList.add(...invalid_classes);
+	}
+	else {
+		object_type.classList.add(...valid_classes);
+	}
+
+	if (valid) {
+		console.log("valid form")
+		htmx.trigger('#new-object-form', 'confirmed');
+	} else {
+		console.log("invalid form");
+	}
+}
+
 function updateTabs(e) {
 	// hide all of the data then mark the current tab as not hidden
 	var tabData = document.getElementById("object-details-tabs-data");

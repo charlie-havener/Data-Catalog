@@ -5,14 +5,20 @@
 <!-- Hidden, it's value is updated by the edit pop ups. This value is then included in htmx
 	requests via hx-include. The value is part of the request.form under it's `name' attribute -->
 <input hidden id="updated-desc" name="updated-desc"></input>
-
-<div id="object_definition" class="block p-6 my-8">
-	<h5 class="text-2xl font-bold tracking-tight text-gray-900">
-		{{ obj.1 }}
-		<button id="desc_update" class="font-normal text-sm ml-4 text-blue-600 hover:underline" hx-put="{{ url_for('edit_object_desc', object_id=obj.0) }}" hx-target="#object_definition" hx-include="#updated-desc" hx-swap="outerHTML" hx-trigger="confirmed" onclick="editDescPopUp(this.id, '{{ obj.1 }}', '{{ obj.3 }}')">Edit</button>
-	</h5>
-	<p class="mb-2 font-semibold tracking-tight text-gray-400">{{ obj.2 }}</h5>
-	<p class="font-normal text-gray-700">{{ obj.3 }}</p>
+<div id="object_definition" class="flex p-6 my-8 mx-8 justify-between">
+	<div>
+		<h5 class="text-2xl font-bold tracking-tight text-gray-900">{{ obj.1 }}</h5>
+		<p class="mb-2 font-semibold tracking-tight text-gray-400">{{ obj.2 }}</p>
+		<p class="font-normal text-gray-700">{{ obj.3 }}</p>
+	</div>
+	<div class="mr-20">
+		<p class="font-semibold text-md text-gray-900 underline mb-2">Actions</p>
+		<button id="desc_update" class="font-normal text-sm text-blue-600 hover:underline" hx-put="{{ url_for('edit_object_desc', object_id=obj.0) }}" hx-target="#object_definition" hx-include="#updated-desc" hx-swap="outerHTML" hx-trigger="confirmed" onclick="editDescPopUp(this.id, '{{ obj.1 }}', '{{ obj.3 }}')">Edit Description</button>
+		{% if obj.4 == "user" %}
+		<p class="font-normal text-sm">TODO: Edit Object</p>
+		<p class="font-normal text-sm">TODO: Delete Object</p>
+		{% endif %}
+	</div>
 </div>
 
 
@@ -113,8 +119,5 @@
   active: text-purple-600 hover:text-purple-600 border-purple-600
   inactive: text-gray-500 hover:text-gray-600 border-gray-100 hover:border-gray-300
 --!>
-
-
-
 
 {% endblock %}

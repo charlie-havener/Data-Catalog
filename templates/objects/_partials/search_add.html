@@ -4,4 +4,7 @@
 	<td class="px-4 py-2 text-center font-medium text-blue-600 hover:underline">
 		<button type="button" onclick="return this.parentNode.parentNode.remove();">Remove</button>
 	</td>
+	<td hidden>
+		<input type="text" name="dependency_{{ obj.0 }}" value="{{ obj.0 }}">{{ obj.0 }}</input>
+	</td>
 </tr>

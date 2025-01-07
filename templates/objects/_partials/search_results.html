@@ -8,7 +8,7 @@
 		{{ o.2 }}
 	</td>
 	<td class="px-4 py-2 text-center">
-		<p hx-get="{{ url_for('add_dependency', object_id=o.0) }}" hx-trigger="click" hx-swap="beforeend show:#dependency_label:top" hx-target="#object_dependency_rows" class="font-medium text-blue-600 hover:underline">
+		<p hx-get="{{ url_for('add_dependency', object_id=o.0) }}" hx-trigger="click" hx-swap="beforeend" hx-target="#object_dependency_rows" class="font-medium text-blue-600 hover:underline">
 			Add
 		</p>
 	</td>

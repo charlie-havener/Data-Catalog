@@ -2,33 +2,31 @@
 
 {% block content %}
 
-<button type="submit" form="new-object-form">Submit</button>
-
-<div class="mt-20 mb-6 mx-10">
-	<h1 class="text-center text-xl font-bold text-gray-900 rounded-md">New Object</h1>
+<div class="mt-10 mb-6 mx-10">
+	<h1 class="text-center text-xl font-bold text-gray-900 rounded-md">New Object Creation Form</h1>
 	<div class="text-xs text-gray-500 mr-6 text-right">
 		<span class="text-red-500 font-bold text-xs"> * </span>
 		required fields
 	</div>
 </div>
 
-<form autocomplete="off" id="new-object-form" class="mx-10">
+<form autocomplete="off" id="new-object-form" class="mx-10" hx-post="{{ url_for('new_object') }}" hx-trigger="confirmed">
 	<div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2 mb-6">
 
 		<div>
-			<label for="object_name" class="block mb-2 text-sm font-medium text-gray-900">
+			<label for="object-name" class="block mb-2 text-sm font-medium text-gray-900">
 				Name
 				<span class="text-red-500 font-bold"> *</span>
 			</label>
-			<input type="text" id="object_name" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Object Name"></input>
+			<input type="text" id="object-name" name="object-name" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus-visible:outline focus-visible:outline-blue-500 focus:border-blue-500" placeholder="Object Name"></input>
 		</div>
 
 		<div>
-			<label for="object_type" class="block mb-2 text-sm font-medium text-gray-900">
+			<label for="object-type" class="block mb-2 text-sm font-medium text-gray-900">
 				Object Type
 				<span class="text-red-500 font-bold"> *</span>
 			</label>
-			<select id="object_type" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+			<select id="object-type" name="object-type" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
 				<option disabled selected value hidden>-- Select an Option --</option>
 				{% for t in types %}
 				<option>{{ t.0 }}</option>
@@ -37,53 +35,48 @@
 		</div>
 
 		<div>
-			<label for="object_owner" class="block mb-2 text-sm font-medium text-gray-900">Owner</label>
-			<input type="text" id="object_owner" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Owner Name"></input>
+			<label for="object-owner" class="block mb-2 text-sm font-medium text-gray-900">Owner</label>
+			<input type="text" id="object-owner" name="object-owner" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Owner Name"></input>
 		</div>
 
 		<div>
-			<label for="object_name" class="block mb-2 text-sm font-medium text-gray-900">Developer</label>
-			<input type="text" id="object_name" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Developer Name"></input>
+			<label for="object-developer" class="block mb-2 text-sm font-medium text-gray-900">Developer</label>
+			<input type="text" id="object-developer" name="object-developer" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Developer Name"></input>
 		</div>
 
 		<div class="col-span-2">
-			<label for="link" class="block mb-2 text-sm font-medium text-gray-900">Link</label>
-			<input type="url" id="link" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="www.example.com"></input>
+			<label for="object-description" class="block mb-2 text-sm font-medium text-gray-900">Description</label>
+			<textarea id="object-description" name="object-description" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Description of the object..."></textarea>
 		</div>
 
 		<div class="col-span-2">
-			<label for="object_description" class="block mb-2 text-sm font-medium text-gray-900">Description</label>
-			<textarea id="object_description" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Description of the object..."></textarea>
+			<label id="dependency_label" for="dependency_table" class="block mb-3 text-sm font-medium text-gray-900">
+				Dependencies
+				<div class=" my-1 text-xs text-gray-500">
+					<p class="ml-2">The things that this new object <span class="font-bold">directly</span> depends on</p>
+				</div>
+			</label>
+			<div id="dependency-table" name="dependency-table" class="relative overflow-x-auto shadow-md sm:rounded-lg">
+				<table class="w-full text-sm text-left text-gray-500 table-fixed">
+					<thead class="text-xs text-gray-700 uppercase bg-gray-300 text-left">
+						<tr>
+							<th scope="col" class="px-6 py-2">Object</th>
+							<th scope="col" class="px-6 py-2 w-1/6">Type</th>
+							<th scope="col" class="px-6 py-2 w-1/12">Action</th>
+							<th hidden scope="col">id</th>
+						</tr>
+					</thead>
+					<tbody id="object_dependency_rows">
+					</tbody>
+				</table>
+			</div>
 		</div>
 
-	</div>
-
-	<label id="dependency_label" for="dependency_table" class="block mb-3 text-sm font-medium text-gray-900">
-		Dependencies
-		<div class=" my-1 text-xs text-gray-500">
-			<p class="ml-2">The things that this new object <span class="font-bold">directly</span> depends on</p>
+		<div class="text-right col-span-2">
+			<button type="button" form="new-object-form" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none" onclick="validateNewObjectForm()">Submit</button>
 		</div>
-	</label>
-	<div id="dependency_table" class="relative overflow-x-auto shadow-md sm:rounded-lg">
-		<table class="w-full text-sm text-left text-gray-500 table-fixed">
-			<thead class="text-xs text-gray-700 uppercase bg-gray-300 text-left">
-				<tr>
-					<th scope="col" class="px-6 py-2">Object</th>
-					<th scope="col" class="px-6 py-2 w-1/6">Type</th>
-					<th scope="col" class="px-6 py-2 w-1/12">Action</th>
-				</tr>
-			</thead>
-			<tbody id="object_dependency_rows">
-				<tr class="bg-white border-b hover:bg-gray-200">
-					<td class="px-4 py-2">aa</td>
-					<td class="px-4 py-2">Table</td>
-					<td class="px-4 py-2 text-center font-medium text-blue-600 hover:underline">
-						<button type="button" onclick="return this.parentNode.parentNode.remove();">Remove</button>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
+
+		</div>
 
 </form>
 
@@ -132,7 +125,7 @@
 
 	</form>
 
-	<div class="relative overflow-x-auto shadow-md sm:rounded-lg mx-10 mt-4">
+	<div class="relative overflow-x-auto shadow-md sm:rounded-lg mx-10 mt-4 mb-10">
 		<table class="w-full text-sm text-left text-gray-500 table-fixed">
 			<thead class="text-xs text-gray-700 uppercase bg-gray-300 text-left">
 				<tr>

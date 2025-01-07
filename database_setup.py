@@ -20,7 +20,7 @@ def create_database():
     c.execute('''
         CREATE TABLE IF NOT EXISTS objects (
             id INTEGER PRIMARY KEY AUTOINCREMENT
-            , name TEXT UNIQUE NOT NULL
+            , name TEXT NOT NULL
             , type INTEGER NOT NULL
             , is_hidden INTEGER NOT NULL
 
