@@ -11,12 +11,22 @@ def get_cursor(db):
 def sanatize(text):
     out = []
     for char in text:
-        if char == '\\':
-            out.append(" ")
-        elif char == '\'':
-            out.append('')
-        elif char == '\"':
-            out.append('')
+        if char == '&':
+            out.append("&amp")
+        elif char == '<':
+            out.append('&lt')
+        elif char == '>':
+            out.append('&gt')
+        elif char == '"':
+            out.append('&quot')
+        elif char == "'":
+            out.append('&#x27')
+        elif char == '/':
+            out.append('&#x2F')
+        elif char == '`':
+            out.append('&grave')
+        elif char == '=':
+            out.append('&#x3D')
         else:
             out.append(char)
     return "".join(x for x in out)
