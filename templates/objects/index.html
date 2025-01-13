@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+	<!-- searches when contents of the searchbox change (with 600ms delay) or immediately when the radio button selection changes --!>
+	<form autocomplete="off" class="items-center mx-32 mt-6"
+		hx-post={{ url_for('objects') }} hx-trigger="input changed delay:600ms from:#search-box, change from:.search-radio, load" hx-target="#search-results" hx-indicator="#radio-indicator" hx-disabled-elt=".search-radio">
+		{{ macros.object_search_box() }}
+	</form>
+	<div class="relative overflow-x-auto shadow-md sm:rounded-lg mx-8 my-10">
+		<table class="w-full text-sm text-left text-gray-500">
+			<thead class="text-xs text-gray-700 uppercase bg-gray-300 text-left">
+				<tr>
+					<th scope="col" class="px-6 py-3">Object</th>
+					<th scope="col" class="px-6 py-3">Type</th>
+					<th scope="col" class="px-6 py-3">Description</th>
+					<th scope="col" class="px-6 py-3 w-1/12">Action</th>
+				</tr>
+			</thead>
+			<tbody id="search-results">
+			</tbody>
+		</table>
+	</div>
+
+{% endblock %}

@@ -82,7 +82,7 @@
 
 	<!-- searches when contents of the searchbox change (with 1s delay) or immediately when the radio button selection changes --!>
 	<form autocomplete="off" class="items-center mx-32 mt-16"
-		hx-post="/search_add" hx-trigger="input changed delay:600ms from:#search-box, change from:.search-radio, load" hx-target="#search-results" hx-indicator="#radio-indicator" hx-disabled-elt=".search-radio">
+		hx-post="/search" hx-trigger="input changed delay:600ms from:#search-box, change from:.search-radio, load" hx-target="#search-results" hx-indicator="#radio-indicator" hx-disabled-elt=".search-radio">
 
 		<div class="flex">
 			<div class="relative w-full">

@@ -20,6 +20,7 @@
 	</head>
 {% endmacro %}
 
+
 {% macro navbar() %}
 	<nav class="border-gray-700 bg-gray-800">
 	  <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
@@ -38,6 +39,65 @@
 		</div>
 	  </div>
 	</nav>
+{% endmacro %}
+
+
+{% macro object_header(obj) %}
+	<div id="object_definition" class="flex p-6 my-8 mx-8 justify-between">
+		<div>
+			<h5 class="text-2xl font-bold tracking-tight text-gray-900">{{ obj.1 }}</h5>
+			<p class="mb-2 font-semibold tracking-tight text-gray-400">{{ obj.2 }}</p>
+			<p class="font-normal text-gray-700">{{ obj.3 }}</p>
+		</div>
+		<div class="mr-20">
+			<p class="font-semibold text-md text-gray-900 underline mb-2">Actions</p>
+			<button id="desc_update" class="font-normal text-sm text-blue-600 hover:underline" hx-patch="{{ url_for('view_object', object_id=obj.0) }}" hx-target="#object_definition" hx-include="#updated-desc" hx-swap="outerHTML" hx-trigger="confirmed" onclick="editDescPopUp(this.id, '{{ obj.1 }}', '{{ obj.3 }}')">Edit Description</button>
+			{% if obj.4 == "user" %}
+			<p class="font-normal text-sm">TODO: Edit Object</p>
+			<p class="font-normal text-sm">TODO: Delete Object</p>
+			{% endif %}
+		</div>
+	</div>
+{% endmacro %}
+
+{% macro object_search_box() %}
+	<div class="flex">
+		<div class="relative w-full">
+			<div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+				<svg class="w-4 h-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+					<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+				</svg>
+			</div>
+			<input type="search" id="search-box" name="search" class="bg-gray-50 border-2 border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder="Begin typing to search..." />
+		</div>
+		<img id="radio-indicator" class="htmx-indicator h-12" src="/static/search.svg" alt="loading"/>
+	</div>
+	<ul class="flex">
+		<li class="p-1">
+			<input type="radio" id="filter-all" name="filter" value="All" class="hidden peer search-radio" checked required />
+			<label for="filter-all" class="inline-flex items-center justify-between p-2 py-1 text-center text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-800 hover:bg-gray-200 hover:border-gray-300">All</label>
+		</li>
+		<li class="p-1">
+			<input type="radio" id="filter-table" name="filter" value="1" class="hidden peer search-radio" required />
+			<label for="filter-table" class="inline-flex items-center justify-between p-2 py-1 text-center text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-800 hover:bg-gray-200 hover:border-gray-300">Tables</label>
+		</li>
+		<li class="p-1">
+			<input type="radio" id="filter-view" name="filter" value="2" class="hidden peer search-radio" required />
+			<label for="filter-view" class="inline-flex items-center justify-between p-2 py-1 text-center text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-800 hover:bg-gray-200 hover:border-gray-300">Views</label>
+		</li>
+		<li class="p-1">
+			<input type="radio" id="filter-storedprocedure" name="filter" value="3" class="hidden peer search-radio" required />
+			<label for="filter-storedprocedure" class="inline-flex items-center justify-between p-2 py-1 text-center text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-800 hover:bg-gray-200 hover:border-gray-300">Stored Procedures</label>
+		</li>
+		<li class="p-1">
+			<input type="radio" id="filter-powerbi" name="filter" value="4" class="hidden peer search-radio" required />
+			<label for="filter-powerbi" class="inline-flex items-center justify-between p-2 py-1 text-center text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-800 hover:bg-gray-200 hover:border-gray-300">PowerBI</label>
+		</li>
+		<li class="p-1">
+			<input type="radio" id="filter-ssrs" name="filter" value="5" class="hidden peer search-radio" required />
+			<label for="filter-ssrs" class="inline-flex items-center justify-between p-2 py-1 text-center text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-800 hover:bg-gray-200 hover:border-gray-300">SSRS</label>
+		</li>
+	</ul>
 {% endmacro %}
 
 
@@ -126,7 +186,7 @@
 						}
 					})
 					.on("click", function(event, d) {
-						window.location.href = `/view/object/${d.data.id}`;
+						window.location.href = `/objects/${d.data.id}`;
 					});
 
 				node.append("circle")
